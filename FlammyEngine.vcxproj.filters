@@ -57,6 +57,9 @@
     <ClCompile Include="input.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Scene2.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="window.h">
@@ -89,6 +92,9 @@
     <ClInclude Include="camera.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Scene2.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\fragment_shader.glsl">
@@ -98,5 +104,11 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="secondSceneFragment_shader.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="secondSceneVertex_shader.glsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

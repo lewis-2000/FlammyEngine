@@ -137,6 +137,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="opengl_renderer.cpp" />
+    <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="scene_node.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="opengl_renderer.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="Scene2.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="scene_node.h" />
     <ClInclude Include="shader.h" />
@@ -157,6 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="secondSceneFragment_shader.glsl" />
+    <None Include="secondSceneVertex_shader.glsl" />
     <None Include="Shaders\fragment_shader.glsl" />
     <None Include="Shaders\vertex_shader.glsl" />
   </ItemGroup>

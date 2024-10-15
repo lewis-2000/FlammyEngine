@@ -3,6 +3,7 @@
 #include "camera.h"
 #include <glm/gtc/matrix_transform.hpp>  // For glm::perspective
 #include <glm/matrix.hpp>
+#include <iostream>
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));  // You can also pass the camera as a parameter to the function if preferred
 
@@ -21,30 +22,69 @@ glm::vec3 cubePositions[] = {
 
 ShapeNode::ShapeNode(const Shader& shader) : shader(shader) {
     initShape();
+    std::cout << "LOG - RENDERING SCENE 1" << std::endl;
+
 }
 
 void ShapeNode::initShape() {
-    // Vertex data for a cube (positions + colors)
+    // Vertex data for a cube (positions + colors + normals)
     float vertices[] = {
-        // positions          // colors
-        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  // bottom-left, back
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // bottom-right, back
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  // top-right, back
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  // top-left, back
-        -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,  // bottom-left, front
-         0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 1.0f,  // bottom-right, front
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  // top-right, front
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f   // top-left, front
+        // positions          // colors           // normals
+        // Back face
+        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, -1.0f,  // bottom-left
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  // bottom-right
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, -1.0f,  // top-right
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 0.0f, -1.0f,  // top-left
+
+        // Front face
+        -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,  1.0f,  // bottom-left
+         0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f,  1.0f,  // bottom-right
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  1.0f,  // top-right
+        -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 0.0f,  1.0f,  // top-left
+
+        // Left face
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,  0.0f,  // top-right
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f,  0.0f,  // top-left
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, -1.0f, 0.0f,  0.0f,  // bottom-left
+        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f, -1.0f, 0.0f,  0.0f,  // bottom-right
+
+        // Right face
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f,  0.0f,  // top-left
+         0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,  0.0f,  // top-right
+         0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f,  0.0f,  // bottom-right
+         0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  1.0f, 0.0f,  0.0f,  // bottom-left
+
+         // Bottom face
+         -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, -1.0f,  0.0f,  // top-right
+          0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, -1.0f,  0.0f,  // top-left
+          0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, -1.0f,  0.0f,  // bottom-left
+         -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f,  0.0f,  // bottom-right
+
+         // Top face
+         -0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f,  1.0f,  0.0f,  // top-left
+          0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f,  1.0f,  0.0f,  // top-right
+          0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f,  1.0f,  0.0f,  // bottom-right
+         -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f,  1.0f,  0.0f   // bottom-left
     };
 
+
+
+
     unsigned int indices[] = {
-        0, 1, 2, 2, 3, 0,  // back face
-        4, 5, 6, 6, 7, 4,  // front face
-        0, 3, 7, 7, 4, 0,  // left face
-        1, 2, 6, 6, 5, 1,  // right face
-        0, 1, 5, 5, 4, 0,  // bottom face
-        3, 2, 6, 6, 7, 3   // top face
+        // Back face
+        0, 1, 2, 2, 3, 0,
+        // Front face
+        4, 5, 6, 6, 7, 4,
+        // Left face
+        8, 9, 10, 10, 11, 8,
+        // Right face
+        12, 13, 14, 14, 15, 12,
+        // Bottom face
+        16, 17, 18, 18, 19, 16,
+        // Top face
+        20, 21, 22, 22, 23, 20
     };
+
 
 
 
@@ -65,20 +105,29 @@ void ShapeNode::initShape() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     // Color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // Normal attribute
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
 
     // Unbind the VAO (not EBO or VBO)
     glBindVertexArray(0);
 }
 
 void ShapeNode::render(const glm::mat4& parentTransform) {
+
+
     // Activate the shader
     shader.use();
+
+    glClearColor(0.51f, 0.51f, 0.51f, 1.0f);
 
     // View matrix from the camera (move the camera back)
     glm::mat4 view = camera.GetViewMatrix();
@@ -91,6 +140,30 @@ void ShapeNode::render(const glm::mat4& parentTransform) {
     // Projection matrix (perspective) with dynamic aspect ratio based on window size
     glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)width / (float)height, 0.1f, 100.0f);
     shader.setMat4("projection", projection);
+
+    // Light position
+    glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 1.0f);
+    shader.setVec3("lightPos", lightPos);
+
+    //Check uniform values
+   /* std::cout << "lightPos location: " << glGetUniformLocation(shader.ID, "lightPos") << std::endl;
+    std::cout << "lightColor location: " << glGetUniformLocation(shader.ID, "lightColor") << std::endl;
+    std::cout << "viewPos location: " << glGetUniformLocation(shader.ID, "viewPos") << std::endl;
+    std::cout << "objectColor location: " << glGetUniformLocation(shader.ID, "objectColor") << std::endl;*/
+
+
+
+
+    // Light color
+    glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    shader.setVec3("lightColor", lightColor);
+
+    // Camera (viewer) position
+    shader.setVec3("viewPos", camera.Position);
+
+    shader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f)); // Example shape color
+
+
 
     // Render each cube
     for (unsigned int i = 0; i < 10; i++) {

@@ -55,6 +55,16 @@ void Shader::setMat4(const std::string& name, const glm::mat4& mat) const {
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 }
 
+void Shader::setVec3(const std::string& name, const glm::vec3& value) const {
+    glUniform3fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, &value[0]); // use shaderProgram instead of ID
+}
+
+void Shader::setVec3(const std::string& name, float x, float y, float z) const {
+    glUniform3f(glGetUniformLocation(shaderProgram, name.c_str()), x, y, z);  // use shaderProgram instead of ID
+}
+
+
+
 
 // Destructor to clean up the shader program
 Shader::~Shader() {

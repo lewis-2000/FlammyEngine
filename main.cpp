@@ -2,6 +2,7 @@
 #include "opengl_renderer.h"
 #include "scene_manager.h"
 #include "shape_node.h"
+#include "Scene2.h"
 #include "window.h"
 #include "input.h"
 
@@ -26,6 +27,9 @@ int main() {
     // Create a shape node (e.g., a square)
     auto shapeNode = std::make_shared<ShapeNode>(shader);
     rootNode->addChild(shapeNode);  // Add the shape to the scene
+
+    auto scene2 = std::make_shared<Scene2>(shader);
+    rootNode->addChild(scene2);  // Add the second scene
 
     // Set the root node in the scene manager
     sceneManager.setRoot(rootNode);
