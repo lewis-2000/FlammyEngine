@@ -136,6 +136,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="multi_cam.cpp" />
     <ClCompile Include="opengl_renderer.cpp" />
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="scene_manager.cpp" />
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="multi_cam.h" />
     <ClInclude Include="opengl_renderer.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="Scene2.h" />

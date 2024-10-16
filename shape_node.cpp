@@ -1,10 +1,37 @@
 #include "shape_node.h"
 #include "camera.h"
+#include "multi_cam.h"
 #include <glm/gtc/matrix_transform.hpp>  // For glm::perspective
 #include <glm/matrix.hpp>
 #include <iostream>
 
-Camera sceneCamera1(glm::vec3(0.0f, 0.0f, 3.0f));
+//Camera sceneCamera1;
+MultiCam multiCam;
+
+Camera sceneCamera1 = multiCam.selectCam(0);
+
+float timeSinceLastSwitch = 0.0f;
+float switchInterval = 5.0f;  // 5 seconds interval
+int currentCameraIndex = 0;
+
+void updateCamera(float deltaTime) {
+    // Update the time since the last camera switch
+    timeSinceLastSwitch += deltaTime;
+
+    if (timeSinceLastSwitch >= switchInterval) {
+        // Reset the timer
+        timeSinceLastSwitch = 0.0f;
+
+        // Switch to the next camera
+        currentCameraIndex = (currentCameraIndex + 1) % multiCam.getNumCams();
+
+        // Select the new camera and apply it to the scene
+        sceneCamera1 = multiCam.selectCam(currentCameraIndex);
+        std::cout << "Switched to camera: " << currentCameraIndex << std::endl;
+    }
+}
+
+
 
 glm::vec3 cubePositions[] = {
     glm::vec3(0.0f,  0.0f,  0.0f),
@@ -130,8 +157,13 @@ void ShapeNode::render(const glm::mat4& parentTransform) {
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 
+
+
     // Activate the shader
     shader.use();
+
+    // Update the camera every frame
+    updateCamera(deltaTime);
 
     // Process input
     processInput(glfwGetCurrentContext(), sceneCamera1, deltaTime);
