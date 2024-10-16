@@ -4,6 +4,8 @@
 #include <glm/matrix.hpp>
 #include <iostream>
 
+Camera sceneCamera2(glm::vec3(0.0f, 2.0f, 1.0f));
+
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -15,7 +17,7 @@ float lastX, lastY;
 float sensitivity = 0.1f;  // Adjust this to control how sensitive the camera is to mouse movements
 
 
-Camera camera2(glm::vec3(0.0f, 0.0f, 3.0f));  // You can also pass the camera as a parameter to the function if preferred
+//Camera camera(glm::vec3(0.0f, 2.0f, 1.0f));  // You can also pass the camera as a parameter to the function if preferred
 
 glm::vec3 newPositions[] = {
     glm::vec3(0.0f,  0.0f,  0.0f),
@@ -34,6 +36,10 @@ glm::vec3 newPositions[] = {
 Scene2::Scene2(const Shader& shader) : shader(shader) {
     initShape();
     std::cout << "LOG - RENDERING SCENE 2" << std::endl;
+
+
+    getNumberOfChildren();
+
 
 }
 
@@ -93,6 +99,7 @@ void Scene2::initShape() {
 
     // Unbind the VAO (not EBO or VBO)
     glBindVertexArray(0);
+
 }
 
 void Scene2::render(const glm::mat4& parentTransform) {
@@ -100,14 +107,14 @@ void Scene2::render(const glm::mat4& parentTransform) {
     shader.use();
 
     // Process input
-    processInput(glfwGetCurrentContext(), camera2, deltaTime);
-    processMouseMovement(glfwGetCurrentContext(), camera2);
+    processInput(glfwGetCurrentContext(), sceneCamera2, deltaTime);
+    processMouseMovement(glfwGetCurrentContext(), sceneCamera2);
     //glfwSetScrollCallback(glfwGetCurrentContext(), scroll_callback);
 
     glClearColor(0.51f, 0.51f, 0.51f, 1.0f);
 
     // View matrix from the camera (move the camera back)
-    glm::mat4 view = camera2.GetViewMatrix();
+    glm::mat4 view = sceneCamera2.GetViewMatrix();
     shader.setMat4("view", view);
 
     // Retrieve the current window size dynamically
@@ -115,7 +122,7 @@ void Scene2::render(const glm::mat4& parentTransform) {
     glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 
     // Projection matrix (perspective) with dynamic aspect ratio based on window size
-    glm::mat4 projection = glm::perspective(glm::radians(camera2.Zoom), (float)width / (float)height, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(sceneCamera2.Zoom), (float)width / (float)height, 0.1f, 100.0f);
     shader.setMat4("projection", projection);
 
     // Light position
@@ -136,7 +143,7 @@ void Scene2::render(const glm::mat4& parentTransform) {
     shader.setVec3("lightColor", lightColor);
 
     // Camera (viewer) position
-    shader.setVec3("viewPos", camera2.Position);
+    shader.setVec3("viewPos", sceneCamera2.Position);
 
     shader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f)); // Example color
 
@@ -152,6 +159,9 @@ void Scene2::render(const glm::mat4& parentTransform) {
         model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));  // Rotate around an arbitrary axis
 
         shader.setMat4("model", model);
+
+        //std::cout << "LOG - Cube angle: " << angle << std::endl;
+
 
         // Bind VAO and render the shape (e.g., cube)
         glBindVertexArray(VAO);
@@ -170,4 +180,6 @@ Scene2::~Scene2() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
+
+    clearChildren();
 }

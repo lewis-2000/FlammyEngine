@@ -2,7 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp> // For transformations
 
 // Constructor
-SceneManager::SceneManager() : root(nullptr) {}
+SceneManager::SceneManager() : root(nullptr), activeSceneId(-1) {}
 
 // Set the root of the scene graph
 void SceneManager::setRoot(std::shared_ptr<SceneNode> rootNode) {
@@ -10,10 +10,23 @@ void SceneManager::setRoot(std::shared_ptr<SceneNode> rootNode) {
 }
 
 // Switch to a new scene
-void SceneManager::switchScene(std::shared_ptr<SceneNode> newRoot) {
-    root = newRoot; // Set the new root of the scene
-}
+void SceneManager::switchScene(int sceneId, std::shared_ptr<SceneNode> newRoot) {
+    // Check if the scene is already active
+    if (sceneId == activeSceneId) {
+        return; // Do nothing if we are switching to the currently active scene
+    }
 
+    // Check if the scene is cached
+    if (sceneCache.find(sceneId) != sceneCache.end()) {
+        root = sceneCache[sceneId]; // Switch to cached scene
+    }
+    else {
+        root = newRoot; // Set new scene as root
+        sceneCache[sceneId] = newRoot; // Cache it for future use
+    }
+
+    activeSceneId = sceneId; // Update the currently active scene ID
+}
 
 // Update the scene (this could be more advanced with animations, physics, etc.)
 void SceneManager::update() {

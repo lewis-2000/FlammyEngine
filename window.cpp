@@ -14,19 +14,40 @@ SceneManager sceneManager;
 //auto rootNode = std::make_shared<SceneNode>();
 
 // Handle Scene Switching
-void handleInput(GLFWwindow* window, Shader& shaderScene1, Shader& shaderScene2) {
+void handleInput(GLFWwindow* window, Shader& shaderScene1, Shader& shaderScene2, SceneManager& sceneManager) {
+    // Check if the 1 key is pressed
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-        // Create and set scene 1
-        auto scene1 = std::make_shared<ShapeNode>(shaderScene1);
-        sceneManager.switchScene(scene1);
+        int scene1Id = 1; // Unique ID for Scene 1
+
+        // Check if scene 1 is already in cache
+        if (sceneManager.sceneCache.find(scene1Id) == sceneManager.sceneCache.end()) {
+            // Create and cache scene 1 if not found
+            auto scene1 = std::make_shared<ShapeNode>(shaderScene1);
+            sceneManager.switchScene(scene1Id, scene1);
+        }
+        else {
+            // Switch to scene 1 from cache
+            sceneManager.switchScene(scene1Id, sceneManager.sceneCache[scene1Id]);
+        }
     }
+    // Check if the 2 key is pressed
     else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-        // Create and set scene 2
-        auto scene2 = std::make_shared<Scene2>(shaderScene2);
-        sceneManager.switchScene(scene2);
+        int scene2Id = 2; // Unique ID for Scene 2
+
+        // Check if scene 2 is already in cache
+        if (sceneManager.sceneCache.find(scene2Id) == sceneManager.sceneCache.end()) {
+            // Create and cache scene 2 if not found
+            auto scene2 = std::make_shared<Scene2>(shaderScene2);
+            sceneManager.switchScene(scene2Id, scene2);
+        }
+        else {
+            // Switch to scene 2 from cache
+            sceneManager.switchScene(scene2Id, sceneManager.sceneCache[scene2Id]);
+        }
     }
     // Add more scenes for other keys (3, 4, etc.) if needed
 }
+
 
 
 
@@ -105,7 +126,7 @@ void Window::run() {
         // Clear the screen using the renderer
         renderer.clear();
 
-        handleInput(window, shaderScene1, shaderScene2);
+        handleInput(window, shaderScene1, shaderScene2, sceneManager);
 
         // Update and render the scene
         sceneManager.update();

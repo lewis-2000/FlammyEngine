@@ -4,6 +4,7 @@
 #include <glm/matrix.hpp>
 #include <iostream>
 
+Camera sceneCamera1(glm::vec3(0.0f, 0.0f, 3.0f));
 
 glm::vec3 cubePositions[] = {
     glm::vec3(0.0f,  0.0f,  0.0f),
@@ -21,6 +22,9 @@ glm::vec3 cubePositions[] = {
 ShapeNode::ShapeNode(const Shader& shader) : shader(shader) {
     initShape();
     std::cout << "LOG - RENDERING SCENE 1" << std::endl;
+
+    getNumberOfChildren();
+
 
 }
 
@@ -130,8 +134,8 @@ void ShapeNode::render(const glm::mat4& parentTransform) {
     shader.use();
 
     // Process input
-    processInput(glfwGetCurrentContext(), camera, deltaTime);
-    processMouseMovement(glfwGetCurrentContext(), camera);
+    processInput(glfwGetCurrentContext(), sceneCamera1, deltaTime);
+    processMouseMovement(glfwGetCurrentContext(), sceneCamera1);
     //glfwSetScrollCallback(glfwGetCurrentContext(), scroll_callback);
 
 
@@ -150,7 +154,7 @@ void ShapeNode::render(const glm::mat4& parentTransform) {
 
 
     // Light position
-    glm::vec3 lightPos = camera.Position;
+    glm::vec3 lightPos = sceneCamera1.Position;
     shader.setVec3("lightPos", lightPos);
 
     // Light color
@@ -158,19 +162,19 @@ void ShapeNode::render(const glm::mat4& parentTransform) {
     shader.setVec3("lightColor", lightColor);
 
     // Camera (viewer) position
-    shader.setVec3("viewPos", camera.Position);
+    shader.setVec3("viewPos", sceneCamera1.Position);
 
     shader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f)); // Example shape color
 
 
     // Projection matrix (perspective) with dynamic aspect ratio based on window size
-    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)width / (float)height, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(sceneCamera1.Zoom), (float)width / (float)height, 0.1f, 100.0f);
     shader.setMat4("projection", projection);
 
 
 
     // View matrix from the camera (move the camera back)
-    glm::mat4 view = camera.GetViewMatrix();
+    glm::mat4 view = sceneCamera1.GetViewMatrix();
     shader.setMat4("view", view);
 
 
@@ -202,4 +206,8 @@ ShapeNode::~ShapeNode() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
+
+    clearChildren();
+
+
 }

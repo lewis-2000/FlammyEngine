@@ -45,6 +45,8 @@ public:
 
     void clearChildren();
 
+    size_t getNumberOfChildren() const;
+
 protected:
     glm::mat4 transformation; // Local transformation matrix
 

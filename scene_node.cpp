@@ -110,4 +110,9 @@ void SceneNode::render(const glm::mat4& parentTransform) {
 // Clear all children from this node
 void SceneNode::clearChildren() {
     children.clear();
+    std::cout << "Child Scene Poped Out" << std::endl;
+}
+
+size_t SceneNode::getNumberOfChildren() const {
+    return children.size();
 }
