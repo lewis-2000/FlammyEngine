@@ -1,23 +1,33 @@
 #include "Scene2.h"
-#include <GLFW/glfw3.h>
 #include "camera.h"
 #include <glm/gtc/matrix_transform.hpp>  // For glm::perspective
 #include <glm/matrix.hpp>
 #include <iostream>
 
+
+// timing
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
+
+// Mouse settings
+bool firstMouse = true;
+float lastX, lastY;
+float sensitivity = 0.1f;  // Adjust this to control how sensitive the camera is to mouse movements
+
+
 Camera camera2(glm::vec3(0.0f, 0.0f, 3.0f));  // You can also pass the camera as a parameter to the function if preferred
 
 glm::vec3 newPositions[] = {
-    glm::vec3(5.0f,  7.0f, -20.0f),
-    glm::vec3(-4.0f, -3.5f, -10.0f),
-    glm::vec3(6.5f,  2.8f, -18.0f),
-    glm::vec3(-7.0f, -5.0f, -22.5f),
-    glm::vec3(3.8f,  -1.0f, -8.0f),
-    glm::vec3(-2.5f,  4.5f, -16.0f),
-    glm::vec3(4.0f, -3.0f, -14.0f),
-    glm::vec3(6.0f,  3.5f, -25.0f),
-    glm::vec3(2.7f,  -2.5f, -12.0f),
-    glm::vec3(-6.2f,  5.0f, -19.0f)
+    glm::vec3(0.0f,  0.0f,  0.0f),
+    glm::vec3(2.0f,  5.0f, -15.0f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3(2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f,  3.0f, -7.5f),
+    glm::vec3(1.3f, -2.0f, -2.5f),
+    glm::vec3(1.5f,  2.0f, -2.5f),
+    glm::vec3(1.5f,  0.2f, -1.5f),
+    glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
 
@@ -26,6 +36,7 @@ Scene2::Scene2(const Shader& shader) : shader(shader) {
     std::cout << "LOG - RENDERING SCENE 2" << std::endl;
 
 }
+
 
 void Scene2::initShape() {
     // Vertex data for a cube (positions + colors + normals)
@@ -88,6 +99,11 @@ void Scene2::render(const glm::mat4& parentTransform) {
     // Activate the shader
     shader.use();
 
+    // Process input
+    processInput(glfwGetCurrentContext(), camera2, deltaTime);
+    processMouseMovement(glfwGetCurrentContext(), camera2);
+    //glfwSetScrollCallback(glfwGetCurrentContext(), scroll_callback);
+
     glClearColor(0.51f, 0.51f, 0.51f, 1.0f);
 
     // View matrix from the camera (move the camera back)
@@ -103,7 +119,7 @@ void Scene2::render(const glm::mat4& parentTransform) {
     shader.setMat4("projection", projection);
 
     // Light position
-    glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 lightPos = glm::vec3(0.0f, 2.0f, -10.0f);
     shader.setVec3("lightPos", lightPos);
 
     //Check uniform values

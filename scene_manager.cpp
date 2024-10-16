@@ -9,6 +9,12 @@ void SceneManager::setRoot(std::shared_ptr<SceneNode> rootNode) {
     root = rootNode;
 }
 
+// Switch to a new scene
+void SceneManager::switchScene(std::shared_ptr<SceneNode> newRoot) {
+    root = newRoot; // Set the new root of the scene
+}
+
+
 // Update the scene (this could be more advanced with animations, physics, etc.)
 void SceneManager::update() {
     // Traverse the scene graph and update nodes if needed (e.g., animations)

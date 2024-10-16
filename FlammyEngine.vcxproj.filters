@@ -36,9 +36,6 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="window_opengl_glfw.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="opengl_renderer.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -59,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="Scene2.cpp">
       <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,9 +86,6 @@
     <ClInclude Include="shape_node.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
@@ -104,10 +101,10 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="packages.config" />
-    <None Include="secondSceneFragment_shader.glsl">
+    <None Include="shaders\secondSceneFragment_shader.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="secondSceneVertex_shader.glsl">
+    <None Include="shaders\secondSceneVertex_shader.glsl">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

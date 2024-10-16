@@ -1,7 +1,6 @@
 #ifndef SCENE_MANAGER_H
 #define SCENE_MANAGER_H
 
-
 #include "scene_node.h"
 #include <memory>
 
@@ -12,6 +11,9 @@ public:
 
     // Set the root of the scene graph
     void setRoot(std::shared_ptr<SceneNode> rootNode);
+
+    // Switch to a new scene
+    void switchScene(std::shared_ptr<SceneNode> newSceneRoot);
 
     // Update the entire scene (e.g., animations, logic)
     void update();

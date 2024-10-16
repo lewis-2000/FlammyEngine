@@ -1,11 +1,9 @@
 #include "shape_node.h"
-#include <GLFW/glfw3.h>
 #include "camera.h"
 #include <glm/gtc/matrix_transform.hpp>  // For glm::perspective
 #include <glm/matrix.hpp>
 #include <iostream>
 
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));  // You can also pass the camera as a parameter to the function if preferred
 
 glm::vec3 cubePositions[] = {
     glm::vec3(0.0f,  0.0f,  0.0f),
@@ -122,37 +120,38 @@ void ShapeNode::initShape() {
 }
 
 void ShapeNode::render(const glm::mat4& parentTransform) {
+    // Calculate deltaTime for smooth movement
+    float currentFrame = glfwGetTime();
 
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
 
     // Activate the shader
     shader.use();
 
+    // Process input
+    processInput(glfwGetCurrentContext(), camera, deltaTime);
+    processMouseMovement(glfwGetCurrentContext(), camera);
+    //glfwSetScrollCallback(glfwGetCurrentContext(), scroll_callback);
+
+
+
     glClearColor(0.51f, 0.51f, 0.51f, 1.0f);
 
-    // View matrix from the camera (move the camera back)
-    glm::mat4 view = camera.GetViewMatrix();
-    shader.setMat4("view", view);
 
     // Retrieve the current window size dynamically
     int width, height;
     glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 
-    // Projection matrix (perspective) with dynamic aspect ratio based on window size
-    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)width / (float)height, 0.1f, 100.0f);
-    shader.setMat4("projection", projection);
+    /*std::cout << "Light Position: "
+        << "X: " << camera.Position.x << " "
+        << "Y: " << camera.Position.y << " "
+        << "Z: " << camera.Position.z << std::endl;*/
+
 
     // Light position
-    glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 1.0f);
+    glm::vec3 lightPos = camera.Position;
     shader.setVec3("lightPos", lightPos);
-
-    //Check uniform values
-   /* std::cout << "lightPos location: " << glGetUniformLocation(shader.ID, "lightPos") << std::endl;
-    std::cout << "lightColor location: " << glGetUniformLocation(shader.ID, "lightColor") << std::endl;
-    std::cout << "viewPos location: " << glGetUniformLocation(shader.ID, "viewPos") << std::endl;
-    std::cout << "objectColor location: " << glGetUniformLocation(shader.ID, "objectColor") << std::endl;*/
-
-
-
 
     // Light color
     glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -163,6 +162,16 @@ void ShapeNode::render(const glm::mat4& parentTransform) {
 
     shader.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f)); // Example shape color
 
+
+    // Projection matrix (perspective) with dynamic aspect ratio based on window size
+    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)width / (float)height, 0.1f, 100.0f);
+    shader.setMat4("projection", projection);
+
+
+
+    // View matrix from the camera (move the camera back)
+    glm::mat4 view = camera.GetViewMatrix();
+    shader.setMat4("view", view);
 
 
     // Render each cube

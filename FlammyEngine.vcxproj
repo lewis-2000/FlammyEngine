@@ -142,12 +142,11 @@
     <ClCompile Include="scene_node.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="shape_node.cpp" />
-    <ClCompile Include="window_opengl_glfw.cpp" />
+    <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="input.h" />
-    <ClInclude Include="Mesh.h" />
     <ClInclude Include="opengl_renderer.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="Scene2.h" />
@@ -159,9 +158,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="secondSceneFragment_shader.glsl" />
-    <None Include="secondSceneVertex_shader.glsl" />
     <None Include="Shaders\fragment_shader.glsl" />
+    <None Include="shaders\secondSceneFragment_shader.glsl" />
+    <None Include="shaders\secondSceneVertex_shader.glsl" />
     <None Include="Shaders\vertex_shader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

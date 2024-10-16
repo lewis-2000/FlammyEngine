@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SCENE_NODE_2
 #define SCENE_NODE_2
 

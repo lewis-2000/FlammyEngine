@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SHAPE_NODE_H
 #define SHAPE_NODE_H
 
